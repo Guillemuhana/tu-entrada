@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { Html5Qrcode } from 'html5-qrcode'
 import { supabase } from '../lib/supabaseClient'
 import Layout from '../components/Layout'
@@ -42,12 +43,14 @@ export default function Scanner() {
 
   useEffect(() => { loadTodayCount() }, [])
 
-  // Arranca la cámara SOLO cuando el div #qr-reader ya está renderizado y visible.
-  // (Iniciarla mientras el contenedor está en display:none rompe en varios navegadores.)
-  useEffect(() => {
-    if (status === 'scanning' && !scannerRef.current) startScanner()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status])
+  // iOS/Safari exige que getUserMedia se dispare DENTRO del gesto del usuario (el toque).
+  // flushSync hace visible el contenedor #qr-reader sincrónicamente antes de arrancar,
+  // sin salir del stack del click -> así funciona en iPhone.
+  function activate() {
+    setCameraError('')
+    flushSync(() => setStatus('scanning'))
+    startScanner()
+  }
 
   function describeCamError(err) {
     const name = err?.name || ''
@@ -69,7 +72,6 @@ export default function Scanner() {
       const s = Math.max(150, Math.floor(Math.min(vw, vh) * 0.7))
       return { width: s, height: s }
     },
-    aspectRatio: 1.0,
   }
 
   async function startScanner() {
@@ -184,7 +186,7 @@ export default function Scanner() {
                 Tocá los <b>⋮</b> arriba a la derecha y elegí <b>"Abrir en Chrome"</b> (Android) o <b>Safari</b> (iPhone).
               </div>
             )}
-            <button className="btn-primary" onClick={() => setStatus('scanning')} style={{ marginTop: 8 }}>Activar cámara</button>
+            <button className="btn-primary" onClick={activate} style={{ marginTop: 8 }}>Activar cámara</button>
             {cameraError && <div className="alert-error" style={{ marginTop: 14, textAlign: 'left' }}>{cameraError}</div>}
           </div>
         )}
