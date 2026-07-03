@@ -5,6 +5,11 @@ import Layout from '../components/Layout'
 
 const READER_ID = 'qr-reader'
 
+// Navegadores embebidos dentro de otras apps (bloquean la cámara)
+const INAPP_BROWSER = /FBAN|FBAV|Instagram|WhatsApp|Line|WeChat|Snapchat|TikTok|musical_ly|Twitter/i.test(
+  typeof navigator !== 'undefined' ? navigator.userAgent : ''
+)
+
 function extractCode(rawText) {
   // Acepta tanto una URL completa (https://.../entrada/CODIGO) como el código pelado
   try {
@@ -69,6 +74,16 @@ export default function Scanner() {
 
   async function startScanner() {
     setCameraError('')
+    // Pre-chequeo: navegador sin API de cámara (típico de navegadores embebidos: WhatsApp, Instagram, Facebook...)
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setStatus('idle')
+      setCameraError(
+        INAPP_BROWSER
+          ? 'Estás abriendo el link dentro de otra app (WhatsApp/Instagram/etc.) y ahí la cámara está bloqueada. Tocá los ⋮ y elegí "Abrir en Chrome" (Android) o "Safari" (iPhone).'
+          : 'Este navegador no permite acceder a la cámara. Probá con Chrome (Android) o Safari (iPhone) actualizado.'
+      )
+      return
+    }
     const scanner = new Html5Qrcode(READER_ID)
     scannerRef.current = scanner
     try {
@@ -163,8 +178,14 @@ export default function Scanner() {
           <div className="panel empty-state">
             <div className="icon">📷</div>
             <p>Activá la cámara para empezar a validar entradas.</p>
+            {INAPP_BROWSER && (
+              <div className="alert-error" style={{ marginTop: 14, textAlign: 'left' }}>
+                ⚠️ Estás abriendo esto dentro de otra app (WhatsApp/Instagram/etc.), donde la cámara suele estar bloqueada.
+                Tocá los <b>⋮</b> arriba a la derecha y elegí <b>"Abrir en Chrome"</b> (Android) o <b>Safari</b> (iPhone).
+              </div>
+            )}
             <button className="btn-primary" onClick={() => setStatus('scanning')} style={{ marginTop: 8 }}>Activar cámara</button>
-            {cameraError && <div className="alert-error" style={{ marginTop: 14 }}>{cameraError}</div>}
+            {cameraError && <div className="alert-error" style={{ marginTop: 14, textAlign: 'left' }}>{cameraError}</div>}
           </div>
         )}
 
