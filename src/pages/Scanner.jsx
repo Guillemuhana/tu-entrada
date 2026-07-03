@@ -37,21 +37,58 @@ export default function Scanner() {
 
   useEffect(() => { loadTodayCount() }, [])
 
+  // Arranca la cámara SOLO cuando el div #qr-reader ya está renderizado y visible.
+  // (Iniciarla mientras el contenedor está en display:none rompe en varios navegadores.)
+  useEffect(() => {
+    if (status === 'scanning' && !scannerRef.current) startScanner()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status])
+
+  function describeCamError(err) {
+    const name = err?.name || ''
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost')
+      return 'La cámara solo funciona por HTTPS. Entrá desde https://tu-entrada.vercel.app (no por IP ni http).'
+    if (name === 'NotAllowedError' || name === 'SecurityError' || name === 'PermissionDeniedError')
+      return 'Permiso de cámara denegado. Tocá el candado 🔒 (o los tres puntos) del navegador → Permisos → Cámara → Permitir, y recargá la página.'
+    if (name === 'NotFoundError' || name === 'DevicesNotFoundError' || name === 'OverconstrainedError')
+      return 'No se encontró ninguna cámara en este dispositivo.'
+    if (name === 'NotReadableError' || name === 'TrackStartError')
+      return 'La cámara está siendo usada por otra app o pestaña. Cerrala y probá de nuevo.'
+    return 'No se pudo iniciar la cámara: ' + (err?.message || name || 'error desconocido')
+  }
+
+  // qrbox proporcional al video: evita el error "qrbox mayor que el video" en celulares
+  const qrConfig = {
+    fps: 10,
+    qrbox: (vw, vh) => {
+      const s = Math.max(150, Math.floor(Math.min(vw, vh) * 0.7))
+      return { width: s, height: s }
+    },
+    aspectRatio: 1.0,
+  }
+
   async function startScanner() {
     setCameraError('')
-    setStatus('scanning')
     const scanner = new Html5Qrcode(READER_ID)
     scannerRef.current = scanner
     try {
-      await scanner.start(
-        { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: 250, height: 250 } },
-        onScanSuccess,
-        () => {} // ignore per-frame decode failures
-      )
+      await scanner.start({ facingMode: 'environment' }, qrConfig, onScanSuccess, () => {})
     } catch (err) {
-      setCameraError('No se pudo acceder a la cámara. Revisá los permisos del navegador.')
-      setStatus('idle')
+      // Fallback: algunos navegadores fallan con facingMode -> elegimos cámara de la lista
+      try {
+        const cams = await Html5Qrcode.getCameras()
+        if (cams && cams.length) {
+          const back = cams.find((c) => /back|rear|trase|environment/i.test(c.label)) || cams[cams.length - 1]
+          await scanner.start(back.id, qrConfig, onScanSuccess, () => {})
+          return
+        }
+        throw err
+      } catch (err2) {
+        try { await scanner.clear() } catch { /* noop */ }
+        scannerRef.current = null
+        setStatus('idle')
+        setCameraError(describeCamError(err2))
+      }
     }
   }
 
@@ -126,7 +163,7 @@ export default function Scanner() {
           <div className="panel empty-state">
             <div className="icon">📷</div>
             <p>Activá la cámara para empezar a validar entradas.</p>
-            <button className="btn-primary" onClick={startScanner} style={{ marginTop: 8 }}>Activar cámara</button>
+            <button className="btn-primary" onClick={() => setStatus('scanning')} style={{ marginTop: 8 }}>Activar cámara</button>
             {cameraError && <div className="alert-error" style={{ marginTop: 14 }}>{cameraError}</div>}
           </div>
         )}
