@@ -10,8 +10,10 @@
   --text: #e9ecf4;
   --text-muted: #8892a6;
   --text-dim: #545e73;
-  --gold: #c9a24b;
-  --gold-dim: #8a7233;
+  /* Azul de marca "Tu Entrada" (los nombres --gold/--gold-dim se conservan
+     por compatibilidad, pero ahora son el acento azul del logo) */
+  --gold: #3d7dff;
+  --gold-dim: #2350cf;
   --green: #3fb27f;
   --green-bg: #12271f;
   --red: #e0524b;
@@ -40,7 +42,16 @@ body {
 }
 
 button, input, select, textarea { font-family: inherit; }
-::selection { background: var(--gold); color: #14100a; }
+::selection { background: var(--gold); color: #fff; }
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  display: block;
+  flex-shrink: 0;
+  filter: drop-shadow(0 3px 10px rgba(61, 125, 255, 0.25));
+}
+.brand-logo-lg { width: 56px; height: 56px; }
 
 .app-shell { min-height: 100%; display: flex; flex-direction: column; }
 
@@ -115,6 +126,16 @@ button, input, select, textarea { font-family: inherit; }
 }
 
 .auth-card .brand-mark { margin-bottom: 28px; }
+
+.auth-logo {
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px 20px;
+  margin-bottom: 26px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+.auth-logo img { width: 100%; max-width: 240px; height: auto; display: block; margin: 0 auto; }
 .auth-form { display: flex; flex-direction: column; gap: 16px; }
 
 .field { display: flex; flex-direction: column; gap: 6px; }
@@ -156,7 +177,7 @@ button, input, select, textarea { font-family: inherit; }
 
 .btn-primary {
   background: linear-gradient(155deg, var(--gold), var(--gold-dim));
-  color: #14100a;
+  color: #fff;
   border: none;
   padding: 11px 18px;
   border-radius: 8px;

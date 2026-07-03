@@ -14,7 +14,7 @@ export default function Layout({ children }) {
     <div className="app-shell">
       <header className="topbar">
         <Link to="/panel" className="topbar-brand" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <div className="brand-badge">TE</div>
+          <img src="/logo.svg" alt="Tu Entrada" className="brand-logo" />
           <div>
             <div className="brand-name">TU ENTRADA</div>
             <div className="brand-sub">{isAdmin ? 'Panel administrador' : 'Control de acceso'}</div>

@@ -29,12 +29,8 @@ export default function Login() {
   return (
     <div className="auth-screen">
       <div className="auth-card">
-        <div className="brand-mark">
-          <div className="brand-badge">TE</div>
-          <div>
-            <div className="brand-name">TU ENTRADA</div>
-            <div className="brand-sub">Control de acceso a eventos</div>
-          </div>
+        <div className="auth-logo">
+          <img src="/logotuentrada.png" alt="Tu Entrada — tu acceso a lo que te mueve" />
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
