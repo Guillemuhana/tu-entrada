@@ -368,16 +368,47 @@ export default function EventDetail() {
 
       {qrGuest && (
         <div className="modal-backdrop" onClick={() => setQrGuest(null)}>
-          <div className="modal-card" style={{ textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
-            <h3 className="section-title" style={{ fontSize: 19 }}>{qrGuest.full_name}</h3>
-            <p className="section-sub">{qrGuest.ticket_type}</p>
+          <div className="modal-card qr-ticket" onClick={(e) => e.stopPropagation()}>
+            {/* Encabezado: evento + fecha */}
+            <div className="qr-ticket-head">
+              <div className="eyebrow">ENTRADA</div>
+              <h3 className="qr-ticket-event">{event.name}</h3>
+              {(event.event_date || event.location) && (
+                <p className="qr-ticket-eventmeta">
+                  {event.event_date ? new Date(event.event_date).toLocaleString('es-AR', { dateStyle: 'long', timeStyle: 'short' }) : ''}
+                  {event.location ? ` · ${event.location}` : ''}
+                </p>
+              )}
+            </div>
+
+            {/* Tipo de entrada */}
+            <div className="qr-ticket-type">{qrGuest.ticket_type}</div>
+
+            {/* QR */}
             <div className="credential-qr">
-              <QRCodeSVG value={`${ticketBaseUrl}/${qrGuest.code}`} size={200} />
+              <QRCodeSVG value={`${ticketBaseUrl}/${qrGuest.code}`} size={190} />
             </div>
-            <div className="link-copy" style={{ marginTop: 8 }}>
-              <span>{`${ticketBaseUrl}/${qrGuest.code}`}</span>
+
+            <div className="qr-ticket-perf" />
+
+            {/* Datos del cliente */}
+            <div className="qr-ticket-info">
+              <div className="qr-ticket-name">{qrGuest.full_name}</div>
+              <dl className="qr-ticket-details">
+                {qrGuest.email && (<><dt>Email</dt><dd>{qrGuest.email}</dd></>)}
+                {qrGuest.phone && (<><dt>Teléfono</dt><dd>{qrGuest.phone}</dd></>)}
+                <dt>Estado</dt>
+                <dd><span className={`badge ${qrGuest.status}`}>{qrGuest.status}</span></dd>
+                <dt>Código</dt>
+                <dd className="mono">#{qrGuest.code.slice(0, 12).toUpperCase()}</dd>
+              </dl>
             </div>
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginTop: 16 }}>
+
+            <div className="qr-ticket-link">
+              <div className="link-copy"><span>{`${ticketBaseUrl}/${qrGuest.code}`}</span></div>
+            </div>
+
+            <div className="qr-ticket-actions">
               <button className="btn-secondary" onClick={() => copyLink(qrGuest)}>
                 {copiedId === qrGuest.id ? 'Copiado ✓' : 'Copiar link'}
               </button>
