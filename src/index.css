@@ -169,7 +169,7 @@ button, input, select, textarea { font-family: inherit; }
   background: linear-gradient(135deg, #25d366, #1ebe5a);
   color: #fff;
   padding: 15px 22px;
-  border-radius: 999px;
+  border-radius: 12px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 16px;
@@ -186,7 +186,7 @@ button, input, select, textarea { font-family: inherit; }
   color: #fff;
   border: none;
   padding: 15px 26px;
-  border-radius: 999px;
+  border-radius: 12px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 16px;
