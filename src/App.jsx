@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './lib/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
+import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Panel from './pages/Panel'
 import EventDetail from './pages/EventDetail'
@@ -27,7 +28,8 @@ export default function App() {
             <ProtectedRoute><Scanner /></ProtectedRoute>
           } />
 
-          <Route path="/" element={<Navigate to="/panel" replace />} />
+          {/* Pantalla de inicio: el flyer. Al tocarlo lleva al login. */}
+          <Route path="/" element={<Landing />} />
           <Route path="*" element={<Navigate to="/panel" replace />} />
         </Routes>
       </AuthProvider>
