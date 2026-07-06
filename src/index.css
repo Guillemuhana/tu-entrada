@@ -114,28 +114,29 @@ button, input, select, textarea { font-family: inherit; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 16px 96px;
+  padding: 20px 16px 92px;
   background:
     radial-gradient(circle at 20% 0%, rgba(61,125,255,0.10), transparent 45%),
     radial-gradient(circle at 80% 100%, rgba(124,92,255,0.12), transparent 50%),
     #f3f2fb;
   cursor: pointer;
-  overflow-y: auto;
+  overflow: hidden;   /* PC: sin scroll (en celular se reactiva) */
 }
 .landing {
   justify-content: center;
 }
 .landing-flyer {
-  width: 100%;
-  max-width: 1300px;   /* PC: flyer horizontal */
+  width: auto;
+  max-width: min(1150px, 100%);   /* PC: flyer horizontal */
+  max-height: calc(100vh - 150px); /* que entre sin scroll */
   height: auto;
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(40, 40, 90, 0.18);
   display: block;
 }
 @media (max-width: 760px) {
-  .landing { justify-content: flex-start; padding-top: 6px; }
-  .landing-flyer { max-width: 460px; }  /* celular: flyer vertical */
+  .landing { justify-content: flex-start; padding-top: 6px; overflow-y: auto; }
+  .landing-flyer { max-width: 460px; max-height: none; }  /* celular: flyer vertical */
   .landing-tagline { display: flex; margin-top: 14px; flex-wrap: nowrap; gap: 6px; padding: 0 6px; }
   .landing-tagline span { font-size: 12px; padding: 6px 9px; gap: 4px; letter-spacing: 0; }
   .landing-tagline span::before { font-size: 11px; }
