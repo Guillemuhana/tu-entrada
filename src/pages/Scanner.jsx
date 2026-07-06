@@ -86,19 +86,10 @@ export default function Scanner() {
       )
       return
     }
-    // Pedimos el permiso de cámara EXPLÍCITAMENTE antes de arrancar el escáner.
-    // Así el diálogo "¿Permitir cámara?" aparece de forma fiable en el celular del
-    // guardia (algunos navegadores no lo muestran bien si sólo lo dispara html5-qrcode).
-    // Soltamos el stream de inmediato para que html5-qrcode pueda tomar la cámara.
-    try {
-      const probe = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-      probe.getTracks().forEach((t) => t.stop())
-    } catch (permErr) {
-      setStatus('idle')
-      setCameraError(describeCamError(permErr))
-      return
-    }
-
+    // IMPORTANTE (iPhone/Safari): la cámara se pide UNA sola vez y dentro del toque del
+    // usuario. NO hacer un getUserMedia de "prueba" antes: en iOS ese doble pedido rompe
+    // el gesto y la cámara falla ("pide permiso pero no anda"). Dejamos que html5-qrcode
+    // haga el único getUserMedia; el diálogo de permiso igual aparece.
     const scanner = new Html5Qrcode(READER_ID)
     scannerRef.current = scanner
     try {
