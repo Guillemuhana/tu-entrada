@@ -136,8 +136,9 @@ button, input, select, textarea { font-family: inherit; }
 @media (max-width: 760px) {
   .landing { justify-content: flex-start; padding-top: 6px; }
   .landing-flyer { max-width: 460px; }  /* celular: flyer vertical */
-  .landing-tagline { margin-top: 14px; }
-  .landing-tagline span { font-size: 14px; padding: 7px 13px; }
+  .landing-tagline { margin-top: 14px; flex-wrap: nowrap; gap: 6px; padding: 0 6px; }
+  .landing-tagline span { font-size: 12px; padding: 6px 9px; gap: 4px; letter-spacing: 0; }
+  .landing-tagline span::before { font-size: 11px; }
 }
 .landing-fallback { text-align: center; max-width: 420px; margin: auto; }
 .landing-fallback img { width: 220px; max-width: 70%; margin-bottom: 20px; }
