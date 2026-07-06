@@ -127,7 +127,7 @@ button, input, select, textarea { font-family: inherit; }
 }
 .landing-flyer {
   width: 100%;
-  max-width: 1550px;   /* PC: flyer horizontal más grande */
+  max-width: 1300px;   /* PC: flyer horizontal */
   height: auto;
   border-radius: 16px;
   box-shadow: 0 20px 60px rgba(40, 40, 90, 0.18);
