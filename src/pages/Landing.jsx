@@ -43,7 +43,7 @@ export default function Landing() {
       <div className="landing-actions" onClick={(e) => e.stopPropagation()}>
         <a
           className="landing-wa"
-          href="https://wa.me/5493515931673?text=%C2%A1Hola!%20Quiero%20una%20demo%20de%20Tu%20Entrada."
+          href="https://wa.me/5493515931673?text=Hola%2C%20quiero%20m%C3%A1s%20info%20sobre%20Tu%20Entrada."
           target="_blank"
           rel="noopener noreferrer"
         >
