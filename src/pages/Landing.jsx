@@ -33,6 +33,13 @@ export default function Landing() {
         </div>
       )}
 
+      <div className="landing-tagline">
+        <span>Fácil</span>
+        <span>Rápido</span>
+        <span>Barato</span>
+        <span>Seguro</span>
+      </div>
+
       <div className="landing-actions" onClick={(e) => e.stopPropagation()}>
         <a
           className="landing-wa"
