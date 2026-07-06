@@ -52,7 +52,10 @@ export default function Landing() {
           </svg>
           ¿Querés una demo? Escribinos
         </a>
-        <button className="landing-cta" onClick={goLogin}>Ingresar →</button>
+        <span className="landing-users-note">
+          <button className="landing-cta" onClick={goLogin}>Ingresar →</button>
+          <small>solo usuarios</small>
+        </span>
       </div>
     </div>
   )

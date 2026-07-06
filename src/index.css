@@ -212,6 +212,19 @@ button, input, select, textarea { font-family: inherit; }
 .landing-wa:hover { filter: brightness(1.05); }
 .landing-wa:active { transform: scale(0.97); }
 
+.landing-users-note {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+}
+.landing-users-note small {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
 .landing-cta {
   flex: 0 0 auto;
   background: linear-gradient(135deg, #3d7dff, #7c5cff);
