@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // Pantalla de inicio: muestra el flyer y, al tocarlo (en cualquier lado),
-// lleva al login. El flyer es la imagen public/flyer.png.
+// lleva al login. Flyer horizontal (img27.png) en PC y vertical (img24.png)
+// en celular; el <picture> cambia solo según el ancho de pantalla.
 export default function Landing() {
   const navigate = useNavigate()
   const [imgOk, setImgOk] = useState(true)
@@ -12,14 +13,19 @@ export default function Landing() {
     <div className="landing" onClick={goLogin} role="button" tabIndex={0}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') goLogin() }}>
       {imgOk ? (
-        <img
-          src="/img24.png"
-          alt="Tu Entrada — Control de acceso a eventos con QR"
-          className="landing-flyer"
-          onError={() => setImgOk(false)}
-        />
+        <picture>
+          {/* Celular: flyer vertical */}
+          <source media="(max-width: 760px)" srcSet="/img24.png" />
+          {/* PC / pantallas anchas: flyer horizontal */}
+          <img
+            src="/img27.png"
+            alt="Tu Entrada — Control de acceso a eventos con QR"
+            className="landing-flyer"
+            onError={() => setImgOk(false)}
+          />
+        </picture>
       ) : (
-        // Fallback por si todavía no cargaste public/flyer.png
+        // Fallback por si no cargaran las imágenes del flyer
         <div className="landing-fallback">
           <img src="/logotuentrada.png" alt="Tu Entrada" />
           <h1>Control de acceso a eventos con QR</h1>
