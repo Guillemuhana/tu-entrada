@@ -65,7 +65,15 @@ export default function Login() {
         </form>
 
         <p className="auth-footnote">
-          Acceso exclusivo para personal autorizado. Los usuarios se crean desde Supabase.
+          ¿Querés comprar <b>Tu Entrada</b> para tus eventos?{' '}
+          <a
+            href="https://wa.me/5493515931673?text=Hola%2C%20quiero%20comprar%20Tu%20Entrada."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="auth-link"
+          >
+            Escribinos al 351 593-1673
+          </a>
         </p>
       </div>
     </div>
